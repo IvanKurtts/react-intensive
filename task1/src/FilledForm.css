@@ -1,0 +1,19 @@
+.filledForm {
+    width: 60%;
+    padding: 5px 40px 20px 40px;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background: rgba(215, 208, 208, 0.333);
+    border-radius: 20px;
+    font-size: larger;
+    box-shadow: inset 5px 5px 10px #474545,
+                inset -5px -5px 10px #292727;
+}
+
+h1 {
+    text-align: center;
+}
+
+ol {
+    word-wrap: break-word;
+}

@@ -2,7 +2,7 @@
     margin: 0; padding: 0;
 }
 
-.container {
+.container, .form {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -36,7 +36,7 @@ label {
     align-items: center;
 }
 
-input {
+.input {
     background: lavender;
     height: 30px;
     width: 60%;
@@ -45,7 +45,7 @@ input {
     border: 1px solid black;
 }
 
-textarea { 
+.textarea { 
     background: lavender;
     width: 80%;
     resize: none; 
@@ -55,7 +55,17 @@ textarea {
 }
 
 .btns {
-    width: 50vw; 
     display: flex;
     justify-content: space-around; 
+}
+
+.text-danger {
+    color: rgb(173, 28, 28);
+}
+
+.aboutStatus, .stackStatus, .lastProjectStatus {
+    width: 80%;
+    color: #474545;
+    font-size: small;
+    text-align: right;
 }

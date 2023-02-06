@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&display=swap');
 
 body {
-  background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(2, 104, 101, 0.79) 100%);
+  background: linear-gradient(0deg, rgb(46, 43, 67) 0%, rgba(2, 104, 101, 0.79) 100%) no-repeat;
+  min-height: 100vh;
   margin: 0;
   font-family: 'Caveat';
 }
