@@ -1,2 +1,1 @@
-React-intensive tasks:
-task1 deployed: https://react-intensive-task.netlify.app/
+React-intensive task deployed: https://react-intensive-task.netlify.app/
