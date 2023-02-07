@@ -61,6 +61,7 @@ label {
 
 .text-danger {
     color: rgb(173, 28, 28);
+    font-size: smaller;
 }
 
 .aboutStatus, .stackStatus, .lastProjectStatus {

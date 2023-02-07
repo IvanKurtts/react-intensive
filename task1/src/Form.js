@@ -2,11 +2,12 @@ import React from 'react';
 import './Form.css';
 import './Button.css';
 import FilledForm from "./FilledForm";
-const Areas = React.lazy(() => import('./Areas'));
+import Input from './Input';
+import Textarea from './Textarea';
 
 class Form extends React.Component {
-    constructor(props) {
-        super(props);
+    constructor() {
+        super();
         this.state = {
         input: {name:'', surname:'', dateOfBirth:'', phoneNumber:'', webSite:'', about:'', stack:'', lastProject:'',},
         errors: {name:'', surname:'', dateOfBirth:'', phoneNumber:'', webSite:'', about:'', stack:'', lastProject:'',},
@@ -90,27 +91,11 @@ class Form extends React.Component {
         return isValid;
     }
 
-    aboutStatus() {
+    Status(name) {
         let result = '';
-        if (this.state.input['about'].length >= 600) {
+        if (name.length >= 600) {
             result = `Превышен лимит символов в поле.`;
-        } else {result = `Осталось ${600 - this.state.input['about'].length}/600 символов`}
-        return result; 
-    }
-
-    stackStatus() {
-        let result = '';
-        if (this.state.input['stack'].length >= 600) {
-            result = `Превышен лимит символов в поле.`;
-        } else {result = `Осталось ${600 - this.state.input['stack'].length}/600 символов`}
-        return result; 
-    }
-
-    lastProjectStatus() {
-        let result = '';
-        if (this.state.input['lastProject'].length >= 600) {
-            result = `Превышен лимит символов в поле.`;
-        } else {result = `Осталось ${600 - this.state.input['lastProject'].length}/600 символов`}
+        } else {result = `Осталось ${600 - name.length}/600 символов`}
         return result; 
     }
 
@@ -126,40 +111,27 @@ class Form extends React.Component {
             <div className="container">
                 <div className="form" style={{ display: this.state.showFilledForm ? "none" : "flex" }}>
                     <h1>Создание анкеты</h1>
-                    {/* <Areas />                    */}
                     <div className="areas">
-                        <div className="inputs">
-                            <label htmlFor='name'>Имя<input label='Имя' type='text' placeholder="Имя" className="input" 
-                                name='name' value={this.state.input.name} onBlur={this.onBlur} onChange={this.handleChange} id='name' />
-                                <div className="text-danger">{this.state.errors.name}</div></label>
-                            <label htmlFor='surname'>Фамилия<input type='text' placeholder="Фамилия" className="input" 
-                                name='surname' value={this.state.input.surname} onBlur={this.onBlur} onChange={this.handleChange} id='surname' />
-                                <div className="text-danger">{this.state.errors.surname}</div></label>
-                            <label htmlFor='dateOfBirth'>Дата рождения<input type='date' placeholder="Дата рождения" className="input" 
-                                name='dateOfBirth' value={this.state.input.dateOfBirth} onBlur={this.onBlur} onChange={this.handleChange} id='dateOfBirth' />
-                                <div className="text-danger">{this.state.errors.dateOfBirth}</div></label>
-                            <label htmlFor='phoneNumber'>Телефон<input type='tel' placeholder="Телефон" className="input" 
-                                name='phoneNumber' value={this.state.input.phoneNumber} onBlur={this.onBlur} onChange={this.handleChange} id='phoneNumber'/>
-                                <div className="text-danger">{this.state.errors.phoneNumber}</div></label>
-                            <label htmlFor='webSite'>Сайт<input type='text' placeholder="Сайт" className="input" 
-                                name='webSite' value={this.state.input.webSite} onBlur={this.onBlur} onChange={this.handleChange} id='webSite' />
-                                <div className="text-danger">{this.state.errors.webSite}</div></label>
-                        </div>
-                        <div className="textareas">
-                            <label htmlFor='about'>О себе<textarea rows={7} placeholder='О себе' className="textarea" 
-                                maxLength='600' name='about' value={this.state.input.about} onBlur={this.onBlur} onChange={this.handleChange} id='about' />
-                                <div className="text-danger">{this.state.errors.about}</div>
-                                <div className='aboutStatus'>{this.aboutStatus()}</div></label>
-                            <label htmlFor='stack'>Стек технологий<textarea rows={7} placeholder='Стек технологий' className="textarea" 
-                                maxLength='600' name='stack' value={this.state.input.stack} onBlur={this.onBlur} onChange={this.handleChange} id='stack' />
-                                <div className="text-danger">{this.state.errors.stack}</div>
-                                <div className='stackStatus'>{this.stackStatus()}</div></label>
-                            <label htmlFor='lastProject'>Описание последнего проекта<textarea rows={7} placeholder='Описание последнего проекта' className="textarea" 
-                                maxLength='600' name='lastProject' value={this.state.input.lastProject} onBlur={this.onBlur} onChange={this.handleChange} id='lastProject' />
-                                <div className="text-danger">{this.state.errors.lastProject}</div>
-                                <div className='lastProjectStatus'>{this.lastProjectStatus()}</div></label>
-                        </div>
-                    </div>
+                        <Input 
+                            input={this.state.input}
+                            errors={this.state.errors}
+                            handleChange={this.handleChange}
+                            submitForm={this.submitForm}
+                            resetForm={this.resetForm}
+                            validate={this.validate}
+                            onBlur={this.onBlur}
+                        />
+                        <Textarea 
+                            input={this.state.input}
+                            errors={this.state.errors}
+                            handleChange={this.handleChange}
+                            submitForm={this.submitForm}
+                            resetForm={this.resetForm}
+                            validate={this.validate}
+                            Status={this.Status}
+                            onBlur={this.onBlur}
+                        /> 
+                    </div>                  
                     <div className="btns">
                         <button className="btn-hover color-1" onClick={this.submitForm}
                         >Сохранить</button>
