@@ -1,14 +1,8 @@
-import React from 'react';
-import Form from './components/js/Form';
+import React from "react";
+import Form from "./components/js/Form";
 
-class App extends React.Component {
-  render() {
-    return (
-      <>
-      <Form />
-      </>
-    );
-  }
-}
+const App = () => {
+  return <Form />;
+};
 
 export default App;

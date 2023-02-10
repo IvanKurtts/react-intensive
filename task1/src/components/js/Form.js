@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/Form.css";
 import "../styles/Button.css";
 import FilledForm from "./FilledForm";
@@ -13,6 +13,7 @@ import {
   validatePhoneNumber,
   validateWebSite,
 } from "../../utils/validations";
+import SuccessMessage from "./SuccessMessage";
 
 const validationMapFilled = [
   "name",
@@ -32,48 +33,39 @@ const validationMapCorrect = {
   webSite: validateWebSite,
 };
 
-class Form extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      input: Object.fromEntries(initInputs),
-      errors: Object.fromEntries(initInputs),
-      showFilledForm: false,
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.submitForm = this.submitForm.bind(this);
-    this.resetForm = this.resetForm.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.initValidation = this.initValidation.bind(this);
-  }
+const Form = () => {
+  const [state, setState] = useState({
+    input: Object.fromEntries(initInputs),
+    errors: Object.fromEntries(initInputs),
+    showFilledForm: false,
+  });
 
-  handleChange(event) {
-    let input = this.state.input;
+  const handleChange = (event) => {
+    let input = state.input;
     input[event.target.name] = event.target.value.trimStart();
     if (input[event.target.name] === input.phoneNumber) {
       input[event.target.name] = event.target.value.replace(/[^0-9-]/g, "");
     }
-    this.setState({
-      input,
-    });
-  }
+    setState((prevState) => ({ ...prevState, input }));
+  };
 
-  submitForm() {
-    if (this.initValidation()) {
-      this.setState({ showFilledForm: true });
+  const submitForm = () => {
+    if (initValidation()) {
+      setState((prevState) => ({ ...prevState, showFilledForm: true }));
     }
-  }
+  };
 
-  resetForm() {
-    this.setState({
+  const resetForm = () => {
+    setState((prevState) => ({
+      ...prevState,
       input: Object.fromEntries(initInputs),
       errors: Object.fromEntries(initInputs),
-    });
-  }
+    }));
+  };
 
-  initValidation() {
-    let input = this.state.input;
-    let errors = this.state.errors;
+  const initValidation = () => {
+    let input = state.input;
+    let errors = state.errors;
     let isValid = true;
     for (let item of validationMapFilled) {
       let value = input[item];
@@ -91,13 +83,11 @@ class Form extends React.Component {
         isValid = false;
       }
     }
-    this.setState({
-      errors,
-    });
+    setState((prevState) => ({ ...prevState, errors }));
     return isValid;
-  }
+  };
 
-  status(name) {
+  const countSymbols = (name) => {
     let result = "";
     if (name.length >= 600) {
       result = `Превышен лимит символов в поле.`;
@@ -105,131 +95,130 @@ class Form extends React.Component {
       result = `Осталось ${600 - name.length}/600 символов`;
     }
     return result;
-  }
+  };
 
-  onBlur(event) {
-    let input = this.state.input;
+  const onBlur = (event) => {
+    let input = state.input;
     event.stopPropagation();
     for (let prop in input) {
       input[prop] = input[prop].trim();
     }
-  }
+  };
 
-  render() {
-    return (
-      <div className="container">
-        <div
-          className="form"
-          style={{ display: this.state.showFilledForm ? "none" : "flex" }}
-        >
-          <h1>Создание анкеты</h1>
-          <div className="areas">
-            <div className="inputs">
-              <Input
-                input={this.state.input}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                onBlur={this.onBlur}
-                label={"name"}
-                text={"Имя"}
-                type={"text"}
-              />
-              <Input
-                input={this.state.input}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                onBlur={this.onBlur}
-                label={"surname"}
-                text={"Фамилия"}
-                type={"text"}
-              />
-              <Input
-                input={this.state.input}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                onBlur={this.onBlur}
-                label={"dateOfBirth"}
-                text={"Дата рождения"}
-                type={"date"}
-              />
-              <Input
-                input={this.state.input}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                onBlur={this.onBlur}
-                label={"phoneNumber"}
-                text={"Телефон"}
-                type={"tel"}
-                maxLength={"12"}
-              />
-              <Input
-                input={this.state.input}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                onBlur={this.onBlur}
-                label={"webSite"}
-                text={"Сайт"}
-                type={"text"}
-              />
-            </div>
-            <div className="textareas">
-              <Textarea
-                input={this.state.input}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                status={this.status}
-                onBlur={this.onBlur}
-                label={"about"}
-                text={"О себе"}
-              />
-              <Textarea
-                input={this.state.input}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                status={this.status}
-                onBlur={this.onBlur}
-                label={"stack"}
-                text={"Стек технологий"}
-              />
-              <Textarea
-                input={this.state.input}
-                errors={this.state.errors}
-                handleChange={this.handleChange}
-                status={this.status}
-                onBlur={this.onBlur}
-                label={"lastProject"}
-                text={"Описание последнего проекта"}
-              />
-            </div>
-          </div>
-          <div className="btns">
-            <Button
-              onClick={this.submitForm}
-              onMouseDown={this.initValidation}
-              className={"btn-hover color-1"}
-              text={"Сохранить"}
+  return (
+    <div className="container">
+      <div
+        className="form"
+        style={{ display: state.showFilledForm ? "none" : "flex" }}
+      >
+        <h1>Создание анкеты</h1>
+        <div className="areas">
+          <div className="inputs">
+            <Input
+              input={state.input}
+              errors={state.errors}
+              handleChange={handleChange}
+              onBlur={onBlur}
+              label={"name"}
+              text={"Имя"}
+              type={"text"}
             />
-            <Button
-              onClick={this.resetForm}
-              className={"btn-hover color-2"}
-              text={"Отмена"}
+            <Input
+              input={state.input}
+              errors={state.errors}
+              handleChange={handleChange}
+              onBlur={onBlur}
+              label={"surname"}
+              text={"Фамилия"}
+              type={"text"}
+            />
+            <Input
+              input={state.input}
+              errors={state.errors}
+              handleChange={handleChange}
+              onBlur={onBlur}
+              label={"dateOfBirth"}
+              text={"Дата рождения"}
+              type={"date"}
+            />
+            <Input
+              input={state.input}
+              errors={state.errors}
+              handleChange={handleChange}
+              onBlur={onBlur}
+              label={"phoneNumber"}
+              text={"Телефон"}
+              type={"tel"}
+              maxLength={"12"}
+            />
+            <Input
+              input={state.input}
+              errors={state.errors}
+              handleChange={handleChange}
+              onBlur={onBlur}
+              label={"webSite"}
+              text={"Сайт"}
+              type={"text"}
+            />
+          </div>
+          <div className="textareas">
+            <Textarea
+              input={state.input}
+              errors={state.errors}
+              handleChange={handleChange}
+              countSymbols={countSymbols}
+              onBlur={onBlur}
+              label={"about"}
+              text={"О себе"}
+            />
+            <Textarea
+              input={state.input}
+              errors={state.errors}
+              handleChange={handleChange}
+              countSymbols={countSymbols}
+              onBlur={onBlur}
+              label={"stack"}
+              text={"Стек технологий"}
+            />
+            <Textarea
+              input={state.input}
+              errors={state.errors}
+              handleChange={handleChange}
+              countSymbols={countSymbols}
+              onBlur={onBlur}
+              label={"lastProject"}
+              text={"Описание последнего проекта"}
             />
           </div>
         </div>
-        <FilledForm
-          name={this.state.input.name}
-          surname={this.state.input.surname}
-          dateOfBirth={this.state.input.dateOfBirth}
-          phoneNumber={this.state.input.phoneNumber}
-          webSite={this.state.input.webSite}
-          about={this.state.input.about}
-          stack={this.state.input.stack}
-          lastProject={this.state.input.lastProject}
-          showFilledForm={this.state.showFilledForm}
-        />
+        <div className="btns">
+          <Button
+            onClick={submitForm}
+            onMouseDown={initValidation}
+            className={"btn-hover color-1"}
+            text={"Сохранить"}
+          />
+          <Button
+            onClick={resetForm}
+            className={"btn-hover color-2"}
+            text={"Отмена"}
+          />
+        </div>
       </div>
-    );
-  }
-}
+      <SuccessMessage showFilledForm={state.showFilledForm} />
+      <FilledForm
+        name={state.input.name}
+        surname={state.input.surname}
+        dateOfBirth={state.input.dateOfBirth}
+        phoneNumber={state.input.phoneNumber}
+        webSite={state.input.webSite}
+        about={state.input.about}
+        stack={state.input.stack}
+        lastProject={state.input.lastProject}
+        showFilledForm={state.showFilledForm}
+      />
+    </div>
+  );
+};
 
 export default Form;
