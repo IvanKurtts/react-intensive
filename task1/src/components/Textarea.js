@@ -1,15 +1,15 @@
 import React from "react";
-import "../styles/Form.css";
+import "./Form/Form.css";
 
-const Textarea = ({
-  label,
-  text,
-  input,
-  errors,
-  onBlur,
-  handleChange,
-  countSymbols,
-}) => {
+const Textarea = ({ label, text, input, errors, onBlur, handleChange }) => {
+  const countSymbols = (name) => {
+    let result =
+      name.length >= 600
+        ? `Превышен лимит символов в поле.`
+        : `Осталось ${600 - name.length}/600 символов`;
+    return result;
+  };
+
   return (
     <label htmlFor={label}>
       {text}

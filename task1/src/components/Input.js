@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/Form.css";
+import "./Form/Form.css";
 
 const Input = ({
   label,

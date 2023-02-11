@@ -1,5 +1,5 @@
 import React from "react";
-import "../styles/FilledForm.css";
+import "./FilledForm.css";
 
 const FilledForm = ({
   showFilledForm,

@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "../styles/FilledForm.css";
+import "./FilledForm/FilledForm.css";
 
 const SuccessMessage = ({ showFilledForm }) => {
   if (showFilledForm) {
