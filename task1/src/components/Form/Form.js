@@ -26,47 +26,47 @@ const validationMap = {
 };
 
 const Form = () => {
-  const [state, setState] = useState({
-    input: { ...initInputs },
-    errors: { ...initInputs },
-    showFilledForm: false,
-  });
+  const [errors, setErrors] = useState({ ...initInputs });
+  const [input, setInput] = useState({ ...initInputs });
+  const [showFilledForm, setFilledForm] = useState(false);
 
   const handleChange = (event) => {
-    let input = initInputs;
-    input[event.target.name] = event.target.value.trimStart();
-    if (input[event.target.name] === input.phoneNumber) {
-      input[event.target.name] = event.target.value.replace(/[^0-9-]/g, "");
-    }
-    setState((prevState) => ({ ...prevState, input }));
+    setInput((prevState) => {
+      input[event.target.name] = event.target.value.trimStart();
+      if (input[event.target.name] === input.phoneNumber) {
+        input[event.target.name] = event.target.value.replace(/[^0-9-]/g, "");
+      }
+      return { ...prevState, input };
+    });
   };
 
   const submitForm = () => {
     if (initValidation()) {
-      setState((prevState) => ({ ...prevState, showFilledForm: true }));
+      setFilledForm(true);
     }
   };
 
   const resetForm = () => {
-    setState((prevState) => ({
-      ...prevState,
-      input: { ...initInputs },
+    setErrors({
       errors: { ...initInputs },
-    }));
+    });
+    setInput({ ...initInputs });
   };
 
   const initValidation = () => {
-    let errors = { ...initInputs };
     let isValid = true;
+    setErrors((prevState) => {
+      return { ...prevState, errors };
+    });
     for (let item in validationMap) {
-      let value = state.input[item];
+      let value = input[item];
       errors[item] = validateAreasFilled(value);
       if (validateAreasFilled(value)) {
         isValid = false;
       }
     }
     for (let item in validationMap) {
-      let value = state.input[item];
+      let value = input[item];
       if (!errors[item]) {
         errors[item] = validationMap[item](value);
       }
@@ -74,70 +74,55 @@ const Form = () => {
         isValid = false;
       }
     }
-    setState((prevState) => ({ ...prevState, errors }));
     return isValid;
-  };
-
-  const onBlur = (event) => {
-    let input = initInputs;
-    event.stopPropagation();
-    for (let prop in input) {
-      input[prop] = input[prop].trim();
-    }
-    setState((prevState) => ({ ...prevState, input }));
   };
 
   return (
     <div className="container">
       <div
         className="form"
-        style={{ display: state.showFilledForm ? "none" : "flex" }}
+        style={{ display: showFilledForm ? "none" : "flex" }}
       >
         <h1>Создание анкеты</h1>
         <div className="areas">
           <div className="inputs">
             <Input
-              input={state.input}
-              errors={state.errors}
+              input={input}
+              errors={errors}
               handleChange={handleChange}
-              onBlur={onBlur}
               label="name"
               text="Имя"
               type="text"
             />
             <Input
-              input={state.input}
-              errors={state.errors}
+              input={input}
+              errors={errors}
               handleChange={handleChange}
-              onBlur={onBlur}
               label="surname"
               text="Фамилия"
               type="text"
             />
             <Input
-              input={state.input}
-              errors={state.errors}
+              input={input}
+              errors={errors}
               handleChange={handleChange}
-              onBlur={onBlur}
               label="dateOfBirth"
               text="Дата рождения"
               type="date"
             />
             <Input
-              input={state.input}
-              errors={state.errors}
+              input={input}
+              errors={errors}
               handleChange={handleChange}
-              onBlur={onBlur}
               label="phoneNumber"
               text="Телефон"
               type="tel"
               maxLength="12"
             />
             <Input
-              input={state.input}
-              errors={state.errors}
+              input={input}
+              errors={errors}
               handleChange={handleChange}
-              onBlur={onBlur}
               label="webSite"
               text="Сайт"
               type="text"
@@ -145,26 +130,23 @@ const Form = () => {
           </div>
           <div className="textareas">
             <Textarea
-              input={state.input}
-              errors={state.errors}
+              input={input}
+              errors={errors}
               handleChange={handleChange}
-              onBlur={onBlur}
               label="about"
               text="О себе"
             />
             <Textarea
-              input={state.input}
-              errors={state.errors}
+              input={input}
+              errors={errors}
               handleChange={handleChange}
-              onBlur={onBlur}
               label="stack"
               text="Стек технологий"
             />
             <Textarea
-              input={state.input}
-              errors={state.errors}
+              input={input}
+              errors={errors}
               handleChange={handleChange}
-              onBlur={onBlur}
               label="lastProject"
               text="Описание последнего проекта"
             />
@@ -184,17 +166,17 @@ const Form = () => {
           />
         </div>
       </div>
-      <SuccessMessage showFilledForm={state.showFilledForm} />
+      <SuccessMessage showFilledForm={showFilledForm} />
       <FilledForm
-        name={state.input.name}
-        surname={state.input.surname}
-        dateOfBirth={state.input.dateOfBirth}
-        phoneNumber={state.input.phoneNumber}
-        webSite={state.input.webSite}
-        about={state.input.about}
-        stack={state.input.stack}
-        lastProject={state.input.lastProject}
-        showFilledForm={state.showFilledForm}
+        name={input.name}
+        surname={input.surname}
+        dateOfBirth={input.dateOfBirth}
+        phoneNumber={input.phoneNumber}
+        webSite={input.webSite}
+        about={input.about}
+        stack={input.stack}
+        lastProject={input.lastProject}
+        showFilledForm={showFilledForm}
       />
     </div>
   );
