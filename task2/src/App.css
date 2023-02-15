@@ -1,0 +1,295 @@
+.hidden {
+  visibility: hidden;
+}
+
+.app-header {
+  position: fixed;
+  width: 100%;
+  background: #04524b;
+  height: 50px;
+}
+
+.mainPage {
+  background: #b2eee9;
+  padding: 80px 30px 30px 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 30px;
+}
+
+.productPage {
+  padding-top: 80px;
+  padding-bottom: 30px;
+  background: #b2eee9;
+  display: grid;
+  place-items: center;
+}
+
+.aboutPage {
+  padding-top: 80px;
+  padding-left: 30px;
+  background: #b2eee9;
+  height: 90vh;
+  margin: 0;
+}
+
+.errorPage {
+  padding-top: 80px;
+  padding-left: 30px;
+  background: #b2eee9;
+  height: 90vh;
+  margin: 0;
+}
+
+.card {
+  border: 2px solid black;
+  background: #b2eee9;
+  border-radius: 5px;
+  display: grid;
+  place-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.card:hover {
+  box-shadow: 3px 3px 10px #000, -3px -3px 10px #000;
+}
+
+button {
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 3px;
+  margin: 2px;
+  background: white;
+  transition: 0.3s;
+}
+
+button:hover {
+  background: #04524b;
+  color: white;
+}
+
+.description {
+  margin-bottom: 20px;
+}
+
+.addButton {
+  display: inline-grid;
+  place-items: center;
+  width: 100%;
+}
+
+.change-btn {
+  width: 25px;
+}
+
+a {
+  color: #000;
+}
+
+.filledCart {
+  position: absolute;
+  padding-left: 10px;
+  padding-right: 10px;
+  right: 0px;
+  top: 0px;
+  background: teal;
+  margin-right: 10px;
+  height: 50px;
+  display: inline-grid;
+  place-items: center;
+}
+
+.app-header > a {
+  margin-left: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  display: inline-grid;
+  place-items: center;
+  height: 50px;
+  text-decoration: none;
+}
+
+.backButton {
+  position: fixed;
+  top: 20vh;
+  left: 10vh;
+  width: 100px;
+  height: 40px;
+}
+
+.productName {
+  display: flex;
+  justify-content: space-around;
+}
+
+.loginMessage {
+  font-style: italic;
+  color: #524444;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.modal {
+  height: 100vh;
+  width: 100vw;
+  background-color: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s;
+}
+
+.modal.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.loginError {
+  opacity: 0;
+  color: red;
+}
+
+.loginError.active {
+  opacity: 1;
+}
+
+.modal-content {
+  padding: 20px;
+  border-radius: 12px;
+  background-color: #b2eee9;
+  height: 150px;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.x-btn {
+  position: relative;
+  width: inherit;
+}
+.x-btn button {
+  position: absolute;
+  right: 0px;
+}
+
+.login-inputs {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin: auto;
+}
+
+.login-btns {
+  display: inline-flex;
+  justify-content: space-around;
+}
+
+.login-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  height: 50px;
+  top: 0;
+  left: 46%;
+}
+
+.login-btn button {
+  width: 80px;
+  height: 40px;
+}
+
+/* 
+loader  */
+.lds-roller {
+  display: inline-block;
+  position: absolute;
+  top: 40vh;
+  width: 80px;
+  height: 80px;
+}
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.3);
+  margin: -4px 0 0 -4px;
+}
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+.lds-roller div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
+}
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+.lds-roller div:nth-child(2):after {
+  top: 68px;
+  left: 56px;
+}
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+.lds-roller div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+.lds-roller div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+.lds-roller div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+.lds-roller div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
