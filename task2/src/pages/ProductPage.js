@@ -12,17 +12,19 @@ export const ProductPage = () => {
   };
 
   useEffect(() => {
-    fetch(`https://api.escuelajs.co/api/v1/products/${id}`)
+    fetch(`https://fakestoreapi.com/products/${id}`)
       .then((res) => res.json())
+      .catch(() => navigate("/a"))
       .then(setProduct);
   }, []);
+
   if (!product) return <Loader />;
   return (
     <div className="productPage">
       <div>
         <img
-          src={product.category.image}
-          style={{ width: "100%", borderRadius: "5px" }}
+          src={product.image}
+          style={{ width: "50%", borderRadius: "5px", marginLeft: "25%" }}
           alt=""
         />
         <div className="productName">
@@ -33,7 +35,7 @@ export const ProductPage = () => {
         <button className="backButton" onClick={goBack}>
           Назад
         </button>
-        <AddButton product={product} />
+        <AddButton price={product.price} />
       </div>
     </div>
   );

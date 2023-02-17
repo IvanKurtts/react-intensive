@@ -206,6 +206,19 @@ a {
   height: 40px;
 }
 
+.load-more-btn {
+  width: 100%;
+  display: grid;
+  place-items: center;
+  background-color: #b2eee9;
+}
+
+.load-more-btn button {
+  width: 160px;
+  height: 40px;
+  margin: 30px;
+}
+
 /* 
 loader  */
 .lds-roller {

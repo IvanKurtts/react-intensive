@@ -9,6 +9,8 @@ export const LoginModal = ({ active, setActive }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [errorActive, setErrorActive] = useState(false);
+
   const usernameChange = (event) => {
     setUsername(event.target.value);
   };
@@ -20,7 +22,7 @@ export const LoginModal = ({ active, setActive }) => {
     if (validation(username, password)) {
       changeLoggedInStatus(!isLoggedIn);
     } else {
-      document.querySelector(".loginError").classList.add("active");
+      setErrorActive(true);
     }
   };
 
@@ -28,9 +30,7 @@ export const LoginModal = ({ active, setActive }) => {
     setActive(false);
     setUsername("");
     setPassword("");
-    document.getElementById("username").value = "";
-    document.getElementById("password").value = "";
-    document.querySelector(".loginError").classList.remove("active");
+    setErrorActive(false);
   };
 
   return (
@@ -47,20 +47,28 @@ export const LoginModal = ({ active, setActive }) => {
         <div className="login-inputs">
           <label>
             Логин{" "}
-            <input id="username" type="text" onChange={usernameChange}></input>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={usernameChange}
+            />
           </label>
           <label>
             Пароль{" "}
             <input
               id="password"
               type="password"
+              value={password}
               onChange={passwordChange}
-            ></input>
+            />
           </label>
-          <div className="loginError">Неверные логин и/или пароль</div>
+          <div className={errorActive ? "loginError active" : "loginError"}>
+            Неверные логин и/или пароль
+          </div>
         </div>
         <div className="login-btns">
-          <button onClick={() => handleLogin()}>Войти</button>
+          <button onClick={handleLogin}>Войти</button>
           <button onClick={resetLoginModal}>Отмена</button>
         </div>
       </div>

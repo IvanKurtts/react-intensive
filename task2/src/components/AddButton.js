@@ -2,20 +2,24 @@ import React, { useState } from "react";
 import { addCounter, priceCounter } from "../utils/addCounter";
 import { useContext } from "react";
 import { LoginContext } from "../hoc/LoginProvider";
+import { CartContext } from "../hoc/CartProvider";
 
-export const AddButton = (product) => {
+export const AddButton = ({ price }) => {
   const [counter, setCounter] = useState(1);
   const { isLoggedIn } = useContext(LoginContext);
-  const Counter = () => {
-    addCounter(counter);
-    priceCounter(product.product.price * counter);
+  const { setProductCount, setPriceCount } = useContext(CartContext);
+
+  const onAdd = () => {
+    setProductCount(addCounter(counter));
+    setPriceCount(priceCounter(price * counter));
     setCounter(1);
   };
+
   if (isLoggedIn) {
     return (
       <div className="addButton">
         <div>
-          <button onClick={Counter}>Добавить в корзину</button>
+          <button onClick={onAdd}>Добавить в корзину</button>
           <button
             className="change-btn"
             onClick={() => setCounter(counter > 1 ? counter - 1 : counter)}

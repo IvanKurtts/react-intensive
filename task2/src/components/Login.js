@@ -2,13 +2,15 @@ import { useContext, useState } from "react";
 import { LoginContext } from "../hoc/LoginProvider";
 import { LoginModal } from "./LoginModal";
 import { cartReset } from "../utils/addCounter";
+import { CartContext } from "../hoc/CartProvider";
 
 export const Login = () => {
   const { isLoggedIn, changeLoggedInStatus } = useContext(LoginContext);
+  const { setProductCount, setPriceCount } = useContext(CartContext);
 
   const handleLogout = () => {
-    document.getElementById("sum").value = "0";
-    document.getElementById("sumValue").value = "0";
+    setProductCount(0);
+    setPriceCount(0);
     setModalActive(false);
     changeLoggedInStatus(!isLoggedIn);
     cartReset();
