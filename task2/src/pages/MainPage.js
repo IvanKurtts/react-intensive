@@ -1,27 +1,32 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
 import Loader from "../components/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getMoreProductsAction,
+  setLoading,
+  setProductsAction,
+} from "../store/reducers/productsReducer";
 
 export const MainPage = () => {
-  const [products, setProducts] = useState([]);
-  const [limit, setLimit] = useState(5);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products.products);
+  const limit = useSelector((state) => state.products.limit);
+  const loading = useSelector((state) => state.products.loading);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/products?limit=${limit}`)
-      .then((res) => res.json())
-      .catch(() => navigate("/a"))
-      .then(setProducts);
+    dispatch(() => {
+      fetch(`https://fakestoreapi.com/products?limit=${limit}`)
+        .then((res) => res.json())
+        .catch(() => navigate("/a"))
+        .then((data) => dispatch(setProductsAction(data)));
+    });
     if (products.length > 0) {
-      setLoading(false);
+      dispatch(setLoading());
     }
   });
-
-  const downloadProducts = () => {
-    setLimit(limit + 5);
-  };
 
   if (loading) {
     return <Loader />;
@@ -42,7 +47,9 @@ export const MainPage = () => {
       </div>
       {limit < 20 && (
         <div className="load-more-btn">
-          <button onClick={downloadProducts}>Загрузить больше товаров</button>
+          <button onClick={() => dispatch(getMoreProductsAction())}>
+            Загрузить больше товаров
+          </button>
         </div>
       )}
     </>

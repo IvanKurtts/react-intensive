@@ -1,40 +1,39 @@
 import React from "react";
 import { validation } from "../utils/validation";
-import { useContext, useState } from "react";
-import { LoginContext } from "../hoc/LoginProvider";
+import {
+  setUsernameAction,
+  setPasswordAction,
+  setErrorAction,
+  setModalAction,
+} from "../store/reducers/loginModalReducer";
+import { setLoginAction } from "../store/reducers/loginReducer";
+import { useDispatch, useSelector } from "react-redux";
 
-export const LoginModal = ({ active, setActive }) => {
-  const { isLoggedIn, changeLoggedInStatus } = useContext(LoginContext);
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [errorActive, setErrorActive] = useState(false);
-
-  const usernameChange = (event) => {
-    setUsername(event.target.value);
-  };
-  const passwordChange = (event) => {
-    setPassword(event.target.value);
-  };
+export const LoginModal = () => {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.isLoggedIn.isLoggedIn);
+  const modalActive = useSelector((state) => state.login.modalActive);
+  const username = useSelector((state) => state.login.username);
+  const password = useSelector((state) => state.login.password);
+  const errorActive = useSelector((state) => state.login.errorActive);
 
   const handleLogin = () => {
     if (validation(username, password)) {
-      changeLoggedInStatus(!isLoggedIn);
+      dispatch(setLoginAction(!isLoggedIn));
     } else {
-      setErrorActive(true);
+      dispatch(setErrorAction(true));
     }
   };
 
   const resetLoginModal = () => {
-    setActive(false);
-    setUsername("");
-    setPassword("");
-    setErrorActive(false);
+    dispatch(setModalAction(false));
+    dispatch(setUsernameAction(""));
+    dispatch(setPasswordAction(""));
+    dispatch(setErrorAction(false));
   };
 
   return (
-    <div className={active ? "modal active" : "modal"}>
+    <div className={modalActive ? "modal active" : "modal"}>
       <div
         className="modal-content"
         onClick={(e) => {
@@ -51,7 +50,9 @@ export const LoginModal = ({ active, setActive }) => {
               id="username"
               type="text"
               value={username}
-              onChange={usernameChange}
+              onChange={(event) =>
+                dispatch(setUsernameAction(event.target.value))
+              }
             />
           </label>
           <label>
@@ -60,7 +61,9 @@ export const LoginModal = ({ active, setActive }) => {
               id="password"
               type="password"
               value={password}
-              onChange={passwordChange}
+              onChange={(event) =>
+                dispatch(setPasswordAction(event.target.value))
+              }
             />
           </label>
           <div className={errorActive ? "loginError active" : "loginError"}>

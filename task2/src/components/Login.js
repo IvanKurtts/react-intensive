@@ -1,30 +1,34 @@
-import { useContext, useState } from "react";
-import { LoginContext } from "../hoc/LoginProvider";
 import { LoginModal } from "./LoginModal";
-import { cartReset } from "../utils/addCounter";
-import { CartContext } from "../hoc/CartProvider";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoginAction } from "../store/reducers/loginReducer";
+import {
+  setUsernameAction,
+  setPasswordAction,
+  setErrorAction,
+  setModalAction,
+} from "../store/reducers/loginModalReducer";
+import { resetCartItemsAction } from "../store/reducers/cartContentReducer";
 
 export const Login = () => {
-  const { isLoggedIn, changeLoggedInStatus } = useContext(LoginContext);
-  const { setProductCount, setPriceCount } = useContext(CartContext);
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.isLoggedIn.isLoggedIn);
 
   const handleLogout = () => {
-    setProductCount(0);
-    setPriceCount(0);
-    setModalActive(false);
-    changeLoggedInStatus(!isLoggedIn);
-    cartReset();
+    dispatch(setModalAction(false));
+    dispatch(setUsernameAction(""));
+    dispatch(setPasswordAction(""));
+    dispatch(setErrorAction(false));
+    dispatch(setLoginAction(!isLoggedIn));
+    dispatch(resetCartItemsAction());
   };
-
-  const [modalActive, setModalActive] = useState(false);
 
   if (!isLoggedIn) {
     return (
       <>
         <div className="login-btn">
-          <button onClick={() => setModalActive(true)}>Войти</button>
+          <button onClick={() => dispatch(setModalAction(true))}>Войти</button>
         </div>
-        <LoginModal active={modalActive} setActive={setModalActive} />
+        <LoginModal />
       </>
     );
   } else {

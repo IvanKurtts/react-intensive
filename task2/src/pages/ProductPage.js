@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddButton } from "../components/AddButton";
 import Loader from "../components/Loader";
+import { setProductAction } from "../store/reducers/productReducer";
+import { useDispatch, useSelector } from "react-redux";
 
 export const ProductPage = () => {
   const { id } = useParams();
-  const [product, setProduct] = useState(null);
   const navigate = useNavigate();
   const goBack = () => {
     navigate(-1);
   };
+  const dispatch = useDispatch();
+  const product = useSelector((state) => state.product.product);
 
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/products/${id}`)
-      .then((res) => res.json())
-      .catch(() => navigate("/a"))
-      .then(setProduct);
+    dispatch(() => {
+      fetch(`https://fakestoreapi.com/products/${id}`)
+        .then((res) => res.json())
+        .catch(() => navigate("/a"))
+        .then((data) => dispatch(setProductAction(data)));
+    });
   }, []);
 
   if (!product) return <Loader />;
@@ -35,7 +40,11 @@ export const ProductPage = () => {
         <button className="backButton" onClick={goBack}>
           Назад
         </button>
-        <AddButton price={product.price} />
+        <AddButton
+          id={product.id}
+          title={product.title}
+          price={product.price}
+        />
       </div>
     </div>
   );

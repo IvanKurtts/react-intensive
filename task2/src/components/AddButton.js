@@ -1,18 +1,41 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { addCounter, priceCounter } from "../utils/addCounter";
-import { useContext } from "react";
-import { LoginContext } from "../hoc/LoginProvider";
-import { CartContext } from "../hoc/CartProvider";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  incrementAction,
+  decrementAction,
+  resetCounterAction,
+} from "../store/reducers/counterReducer";
+import {
+  setProductCountAction,
+  setPriceCountAction,
+} from "../store/reducers/headerCartReducer";
+import {
+  setCartItemsAction,
+  setCartFiltredItemsAction,
+} from "../store/reducers/cartContentReducer";
+import { uniqItems } from "../utils/cartItemsConversion";
 
-export const AddButton = ({ price }) => {
-  const [counter, setCounter] = useState(1);
-  const { isLoggedIn } = useContext(LoginContext);
-  const { setProductCount, setPriceCount } = useContext(CartContext);
+export const AddButton = ({ id, title, price }) => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn.isLoggedIn);
+  const counter = useSelector((state) => state.counter.counter);
+  const cartItems = useSelector((state) => state.cartItems.cartItems);
+  const cartFiltredItems = useSelector(
+    (state) => state.cartItems.cartFiltredItems
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(setCartFiltredItemsAction(uniqItems(cartItems)));
+  }, [cartItems]);
+  useEffect(() => {
+    dispatch(setProductCountAction(addCounter(cartFiltredItems)));
+    dispatch(setPriceCountAction(priceCounter(cartFiltredItems)));
+  });
 
   const onAdd = () => {
-    setProductCount(addCounter(counter));
-    setPriceCount(priceCounter(price * counter));
-    setCounter(1);
+    dispatch(setCartItemsAction([id, title, price, counter]));
+    dispatch(resetCounterAction());
   };
 
   if (isLoggedIn) {
@@ -22,14 +45,18 @@ export const AddButton = ({ price }) => {
           <button onClick={onAdd}>Добавить в корзину</button>
           <button
             className="change-btn"
-            onClick={() => setCounter(counter > 1 ? counter - 1 : counter)}
+            onClick={() =>
+              counter > 1
+                ? dispatch(decrementAction())
+                : dispatch(resetCounterAction())
+            }
           >
             -
           </button>
           <span>{counter}</span>
           <button
             className="change-btn"
-            onClick={() => setCounter(counter + 1)}
+            onClick={() => dispatch(incrementAction())}
           >
             +
           </button>
