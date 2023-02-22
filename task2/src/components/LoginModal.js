@@ -4,18 +4,15 @@ import {
   setUsernameAction,
   setPasswordAction,
   setErrorAction,
-  setModalAction,
-} from "../store/reducers/loginModalReducer";
-import { setLoginAction } from "../store/reducers/loginReducer";
+  setLoginAction,
+  setLogoutAction
+} from "../store/reducers/loginReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { loginSelector } from "../store/selectors/selectors";
 
-export const LoginModal = () => {
+export const LoginModal = ({modalActive, setModalActive}) => {
   const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.isLoggedIn.isLoggedIn);
-  const modalActive = useSelector((state) => state.login.modalActive);
-  const username = useSelector((state) => state.login.username);
-  const password = useSelector((state) => state.login.password);
-  const errorActive = useSelector((state) => state.login.errorActive);
+  const { username, password, errorActive, isLoggedIn } = useSelector(loginSelector);
 
   const handleLogin = () => {
     if (validation(username, password)) {
@@ -26,10 +23,8 @@ export const LoginModal = () => {
   };
 
   const resetLoginModal = () => {
-    dispatch(setModalAction(false));
-    dispatch(setUsernameAction(""));
-    dispatch(setPasswordAction(""));
-    dispatch(setErrorAction(false));
+    setModalActive(false);
+    dispatch(setLogoutAction());
   };
 
   return (

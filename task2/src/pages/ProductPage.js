@@ -2,28 +2,29 @@ import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddButton } from "../components/AddButton";
 import Loader from "../components/Loader";
-import { setProductAction } from "../store/reducers/productReducer";
 import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../store/reducers/productsReducer";
+import { fetchProduct } from "../store/reducers/asyncActions/asyncGetProducts";
+import { productsSelector } from "../store/selectors/selectors";
+import { setProductAction } from "../store/reducers/productsReducer";
 
 export const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { product, loading } = useSelector(productsSelector);
+
   const goBack = () => {
+    dispatch(setProductAction(""));
     navigate(-1);
   };
-  const dispatch = useDispatch();
-  const product = useSelector((state) => state.product.product);
 
   useEffect(() => {
-    dispatch(() => {
-      fetch(`https://fakestoreapi.com/products/${id}`)
-        .then((res) => res.json())
-        .catch(() => navigate("/a"))
-        .then((data) => dispatch(setProductAction(data)));
-    });
-  }, []);
+    dispatch(setLoading(true));
+    dispatch(fetchProduct(id, navigate));
+  }, [id]);
 
-  if (!product) return <Loader />;
+  if (loading) return <Loader />;
   return (
     <div className="productPage">
       <div>

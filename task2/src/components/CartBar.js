@@ -1,13 +1,13 @@
 import cartIcon from "../icons/cartIcon.svg";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Cart } from "./Cart";
-import { setCartAction } from "../store/reducers/cartReducer";
+import { useState } from "react";
+import { cartSelector } from "../store/selectors/selectors";
 
 export const CartBar = () => {
-  const dispatch = useDispatch();
-  const isLoggedIn = useSelector((state) => state.isLoggedIn.isLoggedIn);
-  const productCount = useSelector((state) => state.headerCart.productCount);
-  const priceCount = useSelector((state) => state.headerCart.priceCount);
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  const { productCount, priceCount } = useSelector(cartSelector);
+  const [cartActive, setCartActive] = useState(false);
 
   if (isLoggedIn) {
     return (
@@ -18,7 +18,7 @@ export const CartBar = () => {
               src={cartIcon}
               alt=""
               className="cartIcon"
-              onClick={() => dispatch(setCartAction(true))}
+              onClick={() => setCartActive(true)}
             />
             <span> В корзине </span>
             <span id="sum">{productCount}</span>
@@ -27,7 +27,7 @@ export const CartBar = () => {
             <span>$</span>
           </div>
         </div>
-        <Cart />
+        <Cart cartActive={cartActive} setCartActive={setCartActive} />
       </>
     );
   }

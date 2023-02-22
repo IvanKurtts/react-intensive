@@ -1,34 +1,28 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setProductCountAction,
-  setPriceCountAction,
-} from "../store/reducers/headerCartReducer";
-import {
   setCartItemsAction,
   setNewCartItemsAction,
-} from "../store/reducers/cartContentReducer";
-import { resetCartItemsAction } from "../store/reducers/cartContentReducer";
+  resetCartAction,
+} from "../store/reducers/cartReducer";
+import { cartSelector } from "../store/selectors/selectors";
 
 export const CartContent = ({ id, title, price, itemCount }) => {
-  const cartItems = useSelector((state) => state.cartItems.cartItems);
+  const { cartItems } = useSelector(cartSelector);
   const dispatch = useDispatch();
 
   const onIncrement = () => {
-    dispatch(setCartItemsAction([id, title, price, 1]));
+    dispatch(setCartItemsAction({ id, title, price, counter: 1 }));
   };
   const onDecrement = () => {
     if (itemCount > 1) {
-      dispatch(setCartItemsAction([id, title, price, -1]));
+      dispatch(setCartItemsAction({ id, title, price, counter: -1 }));
     }
   };
-
   const removeItem = (id) => {
-    const newItems = cartItems.filter((item) => item[0] !== id);
+    const newItems = cartItems.filter((item) => item.id !== id);
     dispatch(setNewCartItemsAction(newItems));
     if (newItems.length === 0) {
-      dispatch(setProductCountAction(0));
-      dispatch(setPriceCountAction(0));
-      dispatch(resetCartItemsAction());
+      dispatch(resetCartAction());
     }
   };
 

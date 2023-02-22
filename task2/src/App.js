@@ -11,6 +11,7 @@ function App() {
         <Route path="about" element={<AboutPage />} />
         <Route path="products/:id" element={<ProductPage />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/error" element={<NotFound />} />
       </Route>
     </Routes>
   );

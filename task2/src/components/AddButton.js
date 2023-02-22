@@ -1,28 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { addCounter, priceCounter } from "../utils/addCounter";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  incrementAction,
-  decrementAction,
-  resetCounterAction,
-} from "../store/reducers/counterReducer";
-import {
-  setProductCountAction,
-  setPriceCountAction,
-} from "../store/reducers/headerCartReducer";
-import {
   setCartItemsAction,
   setCartFiltredItemsAction,
-} from "../store/reducers/cartContentReducer";
+  setProductCountAction,
+  setPriceCountAction,
+} from "../store/reducers/cartReducer";
 import { uniqItems } from "../utils/cartItemsConversion";
+import { cartSelector, loginSelector } from "../store/selectors/selectors";
 
 export const AddButton = ({ id, title, price }) => {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn.isLoggedIn);
-  const counter = useSelector((state) => state.counter.counter);
-  const cartItems = useSelector((state) => state.cartItems.cartItems);
-  const cartFiltredItems = useSelector(
-    (state) => state.cartItems.cartFiltredItems
-  );
+  const { isLoggedIn } = useSelector(loginSelector);
+  const { cartItems, cartFiltredItems } = useSelector(cartSelector);
+  const [counter, setCounter] = useState(1);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -31,11 +22,10 @@ export const AddButton = ({ id, title, price }) => {
   useEffect(() => {
     dispatch(setProductCountAction(addCounter(cartFiltredItems)));
     dispatch(setPriceCountAction(priceCounter(cartFiltredItems)));
-  });
-
+  }, [cartFiltredItems]);
   const onAdd = () => {
-    dispatch(setCartItemsAction([id, title, price, counter]));
-    dispatch(resetCounterAction());
+    dispatch(setCartItemsAction({ id, title, price, counter }));
+    setCounter(1);
   };
 
   if (isLoggedIn) {
@@ -46,9 +36,7 @@ export const AddButton = ({ id, title, price }) => {
           <button
             className="change-btn"
             onClick={() =>
-              counter > 1
-                ? dispatch(decrementAction())
-                : dispatch(resetCounterAction())
+              counter > 1 ? setCounter(counter - 1) : setCounter(1)
             }
           >
             -
@@ -56,7 +44,7 @@ export const AddButton = ({ id, title, price }) => {
           <span>{counter}</span>
           <button
             className="change-btn"
-            onClick={() => dispatch(incrementAction())}
+            onClick={() => setCounter(counter + 1)}
           >
             +
           </button>

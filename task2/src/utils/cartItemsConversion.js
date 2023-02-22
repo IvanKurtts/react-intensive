@@ -1,9 +1,9 @@
 export const uniqItems = (arr) => {
   let result = [];
   for (let item of arr) {
-    result.push([item[0], item[1], item[2]]);
+    result.push([item.id, item.title, item.price]);
   }
-  let res = result.reduce(
+  let elements = result.reduce(
     (res, cur) =>
       res.find((find) => JSON.stringify(find) === JSON.stringify(cur))
         ? res
@@ -12,18 +12,21 @@ export const uniqItems = (arr) => {
   );
   result = [];
   for (let item of arr) {
-    result.push([item[0], item[3]]);
+    result.push([item.id, item.counter]);
   }
-  let s = result.reduce((a, b) => ((a[b[0]] = (a[b[0]] || 0) + b[1]), a), {});
-  for (let item of res) {
-    for (let key in s) {
+  let sumCounter = result.reduce(
+    (sum, res) => ((sum[res[0]] = (sum[res[0]] || 0) + res[1]), sum),
+    {}
+  );
+  for (let item of elements) {
+    for (let key in sumCounter) {
       if (item[0] === +key) {
-        item.push(s[key]);
+        item.push(sumCounter[key]);
       }
     }
   }
   let state = [];
-  for (let item of res) {
+  for (let item of elements) {
     item = { id: item[0], title: item[1], price: item[2], count: item[3] };
     state.push(item);
   }

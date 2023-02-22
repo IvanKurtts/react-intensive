@@ -3,30 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { ProductCard } from "../components/ProductCard";
 import Loader from "../components/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getMoreProductsAction,
-  setLoading,
-  setProductsAction,
-} from "../store/reducers/productsReducer";
+import { getMoreProductsAction } from "../store/reducers/productsReducer";
+import { fetchProducts } from "../store/reducers/asyncActions/asyncGetProducts";
+import { productsSelector } from "../store/selectors/selectors";
 
 export const MainPage = () => {
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.products.products);
-  const limit = useSelector((state) => state.products.limit);
-  const loading = useSelector((state) => state.products.loading);
+  const { products, limit, loading } = useSelector(productsSelector);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(() => {
-      fetch(`https://fakestoreapi.com/products?limit=${limit}`)
-        .then((res) => res.json())
-        .catch(() => navigate("/a"))
-        .then((data) => dispatch(setProductsAction(data)));
-    });
-    if (products.length > 0) {
-      dispatch(setLoading());
-    }
-  });
+    dispatch(fetchProducts(limit, navigate));
+  }, [limit]);
 
   if (loading) {
     return <Loader />;
@@ -37,6 +25,7 @@ export const MainPage = () => {
         {products.map((product) => {
           return (
             <ProductCard
+              key={product.id}
               image={product.image}
               id={product.id}
               title={product.title}
